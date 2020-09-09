@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol DrinksViewControllerDelegate {
+    func filterApplied(withParameters parameters: [DrinksFilter: Any])
+}
+
 class DrinksViewController: UIViewController {
     
     @IBOutlet private weak var drinksTableView: UITableView!
@@ -16,40 +20,54 @@ class DrinksViewController: UIViewController {
     
     private var presenter: DrinksPresenter!
     
+    var delegate: DrinksViewControllerDelegate?
+    
     
     // MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = DrinksPresenter(view: self)
+        setup()
         setupSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
     }
     
     // MARK: Public methods / presenter interacion
     
-    func reloadTableView() {
+    func reloadData() {
         drinksTableView.reloadData()
     }
     
-    // MARK: Setup methods
+    // MARK: - Setup methods
 
+    private func setup() {
+        presenter = DrinksPresenter(view: self)
+        delegate = self
+    }
+    
     private func setupSubviews() {
         drinksTableView.dataSource = self
         drinksTableView.delegate = self
         drinksTableView.register(UINib(nibName: drinkCellId, bundle: nil), forCellReuseIdentifier: drinkCellId)
     }
     
-    // MARK: Navigation
+    // MARK: 
+    
+    // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
         if segue.identifier == "showFiltersScreen" {
             guard let filtersViewController = segue.destination as? FiltersViewController else { return }
+            let categories = presenter.getSelectedCategories()
+            let allCategories = presenter.getAllCategories()
             
-            let categories = presenter.getCategoriesList()
-            
-            filtersViewController.categories = categories
+            filtersViewController.allCategories = allCategories
+            filtersViewController.selectedCategories = categories
+            filtersViewController.delegate = self
         }
     }
     
@@ -91,3 +109,11 @@ extension DrinksViewController: UITableViewDelegate {
     }
 }
 
+
+// MARK: - DrinksViewControllerDelegate
+
+extension DrinksViewController: DrinksViewControllerDelegate {
+    func filterApplied(withParameters parameters: [DrinksFilter : Any]) {
+        presenter.setFilters(with: parameters)
+    }
+}

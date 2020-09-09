@@ -8,13 +8,29 @@
 
 import UIKit
 
+enum DrinksFilter {
+    case category
+}
+
 class DrinksPresenter {
     typealias DrinksGroupedByCategory = [([Drink], String)]
     
     private let view: DrinksViewController
     
-    private var drinks: DrinksGroupedByCategory = []
-    var categories: [DrinkCategory] = []
+    // Downloaded data
+    private var fetchedDrinks: DrinksGroupedByCategory = []
+    private var fetchedCategories: [String] = []
+
+    // Current data, modifying by user
+    private var filteredDrinks: DrinksGroupedByCategory { getFilteredDrinks() }
+    private var selectedCategories: [String] { filters[.category] as? [String] ?? [] }
+    
+    private var filters: [DrinksFilter: Any] = [:] {
+        didSet {
+            checkFilteringResult()
+            view.reloadData()
+        }
+    }
     
     
     init(view: DrinksViewController) {
@@ -22,31 +38,75 @@ class DrinksPresenter {
         setupInitialData()
     }
     
-    //MARK: - Public methods / view interaction
-    
-    // MARK: getters
+    // MARK: - View interaction interface
     
     func getNumberOfGroups() -> Int {
-        drinks.count
+        filteredDrinks.count
     }
     
     func getGroupName(in groupIndex: Int) -> String {
-        drinks[groupIndex].1
+        filteredDrinks[groupIndex].1
     }
     
     func getNumberOfDrinksInGroup(in groupIndex: Int) -> Int {
-        drinks[groupIndex].0.count
+        filteredDrinks[groupIndex].0.count
     }
     
     func getDrinkName(in groupIndex: Int, with index: Int) -> String {
-        drinks[groupIndex].0[index].strDrink ?? ""
+        filteredDrinks[groupIndex].0[index].strDrink ?? ""
     }
     
     func getDrinkImage(in groupIndex: Int, with index: Int) -> String {
-        drinks[groupIndex].0[index].strDrinkThumb ?? ""
+        filteredDrinks[groupIndex].0[index].strDrinkThumb ?? ""
     }
     
-    func getCategoriesList() -> [String] {
+    func getSelectedCategories() -> [String] {
+        selectedCategories
+    }
+    
+    func getAllCategories() -> [String] {
+        fetchedCategories
+    }
+    
+    func setFilters(with newFilters: [DrinksFilter: Any]) {
+        filters = newFilters
+    }
+    
+    func checkShouldLoadNewCategory(section: Int, index: Int) {
+        let isLastGroup = section == (getNumberOfGroups() - 1)
+        let isLastDrink = index == (getNumberOfDrinksInGroup(in: section) - 1)
+        let canLoadMoreCategories = getNumberOfGroups() < selectedCategories.count
+        guard isLastGroup && isLastDrink else { return }
+        
+        if canLoadMoreCategories {
+            let newCategoryName = selectedCategories[getNumberOfGroups()]
+            loadDrinksOfCategory(name: newCategoryName)
+        } else {
+            // TODO: show alert
+        }
+    }
+    
+    // MARK: Private methods
+    
+    
+    
+    // MARK: - Data formating
+    
+    private func getFilteredDrinks() -> DrinksGroupedByCategory {        
+        var filteredDrinks = fetchedDrinks
+        
+        for (filterType, value) in filters {
+            switch filterType {
+            case .category:
+                guard let categories = value as? [String] else { continue }
+                filteredDrinks = filteredDrinks.filter { categories.contains($0.1) }
+            }
+        }
+        
+        return filteredDrinks
+    }
+    
+    private func getCategoriesList(from categories: [DrinkCategory]) -> [String] {
         var categoriesList: [String] = []
         
         categories.forEach { category in
@@ -57,54 +117,51 @@ class DrinksPresenter {
         return categoriesList
     }
     
-    func checkShouldLoadNewCategory(section: Int, index: Int) {
-        let isLastGroup = section == (getNumberOfGroups() - 1)
-        let isLastDrink = index == (getNumberOfDrinksInGroup(in: section) - 1)
-        let canLoadMoreCategories = getNumberOfGroups() < categories.count
-        guard isLastGroup && isLastDrink else { return }
-        
-        guard let newCategoryName = categories[getNumberOfGroups()].strCategory else { return }
-        
-        if canLoadMoreCategories {
-            loadNextCategoryOfDrinks(withName: newCategoryName)
-        } else {
-            // TODO: show alert
+    private func checkFilteringResult() {
+        if filteredDrinks.isEmpty && !fetchedDrinks.isEmpty {
+            guard let category = selectedCategories.first else { return }
+            loadDrinksOfCategory(name: category)
         }
     }
     
-    // MARK: - Private methods
-    
-    // MARK: Data manipulation methods
+    // MARK: - Data fetching-obtaining
     
     private func setupInitialData() {
         fetchCategories() { [weak self] categories in
+            guard let strongSelf = self else { return }
             guard let categories = categories else { return }
-            self?.categories = categories
+            let categoriesList = strongSelf.getCategoriesList(from: categories)
             
-            guard let firstCategory = categories.first?.strCategory else { return }
+            strongSelf.fetchedCategories = categoriesList
+            strongSelf.filters[.category] = categoriesList
             
-            self?.fetchDrinks(byCategory: firstCategory) { drinks in
+            guard let firstCategory = categoriesList.first else { return }
+            
+            strongSelf.fetchDrinks(byCategory: firstCategory) { drinks in
                 guard let drinks = drinks else { return }
                 
-                self?.drinks.append((drinks, firstCategory))
+                strongSelf.fetchedDrinks.append((drinks, firstCategory))
                 
-                self?.view.reloadTableView()
+                strongSelf.view.reloadData()
             }
         }
     }
     
-    private func loadNextCategoryOfDrinks(withName name: String) {
+    private func loadDrinksOfCategory(name: String) {
         fetchDrinks(byCategory: name) { [weak self] fetchedDrinks in
             guard let fetchedDrinks = fetchedDrinks else { return }
             
-            self?.drinks.append((fetchedDrinks, name))
+            self?.fetchedDrinks.append((fetchedDrinks, name))
             
-            self?.view.reloadTableView()
+            self?.view.reloadData()
         }
     }
 
-    // MARK: API methods
-    
+}
+
+// MARK: - API Methods
+
+extension DrinksPresenter {
     private func fetchDrinks(byCategory: String, completion: @escaping ([Drink]?) -> Void) {
         ApiService.getDrinks(byCategory: byCategory) { result in
             switch result {
@@ -124,7 +181,7 @@ class DrinksPresenter {
             switch result {
             case .success(let categories):
                 guard let fetchedCategories = categories.categories else { return }
-                self?.categories = fetchedCategories
+                self?.fetchedCategories = self?.getCategoriesList(from: fetchedCategories) ?? []
                 completion(fetchedCategories)
             case .failure(let error):
                 completion(nil)
@@ -132,5 +189,4 @@ class DrinksPresenter {
             }
         }
     }
-
 }

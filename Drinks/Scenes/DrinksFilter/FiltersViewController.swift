@@ -13,8 +13,11 @@ class FiltersViewController: UIViewController {
     @IBOutlet weak var filtersTableView: UITableView!
     
     private var filterCellId: String { String(describing: FilterCell.self) }
-
-    var categories: [String] = []
+    
+    var delegate: DrinksViewControllerDelegate?
+    
+    var allCategories: [String] = []
+    var selectedCategories: [String] = []
     
     
     override func viewDidLoad() {
@@ -24,24 +27,48 @@ class FiltersViewController: UIViewController {
     }
 
     private func setupSubviews() {
+        filtersTableView.delegate = self
         filtersTableView.dataSource = self
         filtersTableView.register(UINib(nibName: filterCellId, bundle: nil), forCellReuseIdentifier: filterCellId)
     }
     
+    @IBAction private func onApplyButtonTapped(_ sender: Any) {
+        delegate?.filterApplied(withParameters: [.category : selectedCategories])
+        navigationController?.popViewController(animated: true)
+    }
 }
 
+// MARK: - UITableViewDataSource
 
 extension FiltersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categories.count
+        allCategories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: filterCellId) as? FilterCell else { return UITableViewCell() }
 
-        // TODO: State
-        cell.setup(withName: categories[indexPath.row], state: true)
+        let category = allCategories[indexPath.row]
+        let isSelected = selectedCategories.contains(category)
+        
+        cell.setup(withName: category, state: isSelected)
         
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension FiltersViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let category = allCategories[indexPath.row]
+        
+        if let categoryIndex = selectedCategories.firstIndex(of: category) {
+            selectedCategories.remove(at: categoryIndex)
+        } else {
+            selectedCategories.append(category)
+        }
+        
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
