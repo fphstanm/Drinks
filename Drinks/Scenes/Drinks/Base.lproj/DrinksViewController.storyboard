@@ -29,7 +29,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="B9d-DN-vfG"/>
+                    <navigationItem key="navigationItem" id="B9d-DN-vfG">
+                        <barButtonItem key="rightBarButtonItem" image="filter" id="lY7-cu-oSt">
+                            <connections>
+                                <segue destination="CJn-yf-ldH" kind="push" identifier="showFiltersScreen" id="PUz-IQ-VJ3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="drinksTableView" destination="evS-6r-TKP" id="As1-7w-74G"/>
                     </connections>
@@ -37,6 +43,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="686.95652173913049" y="-1.3392857142857142"/>
+        </scene>
+        <!--FiltersViewController-->
+        <scene sceneID="2a9-mx-uJU">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="FiltersViewController" storyboardName="FiltersViewController" id="CJn-yf-ldH" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="kHm-5K-a4E"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mbb-4V-NcE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1381" y="-15"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="utR-To-BT5">
@@ -57,4 +73,7 @@
             <point key="canvasLocation" x="-223.18840579710147" y="-1.3392857142857142"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="filter" width="29" height="29"/>
+    </resources>
 </document>

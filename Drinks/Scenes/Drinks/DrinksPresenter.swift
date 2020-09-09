@@ -46,6 +46,17 @@ class DrinksPresenter {
         drinks[groupIndex].0[index].strDrinkThumb ?? ""
     }
     
+    func getCategoriesList() -> [String] {
+        var categoriesList: [String] = []
+        
+        categories.forEach { category in
+            if let name = category.strCategory {
+                categoriesList.append(name)
+            }
+        }
+        return categoriesList
+    }
+    
     func checkShouldLoadNewCategory(section: Int, index: Int) {
         let isLastGroup = section == (getNumberOfGroups() - 1)
         let isLastDrink = index == (getNumberOfDrinksInGroup(in: section) - 1)

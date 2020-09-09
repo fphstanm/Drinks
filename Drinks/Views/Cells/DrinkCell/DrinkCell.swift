@@ -10,8 +10,10 @@ import UIKit
 import Kingfisher
 
 class DrinkCell: UITableViewCell {
+    
     @IBOutlet weak var drinkImageView: UIImageView!
     @IBOutlet weak var drinkNameLabel: UILabel!
+    
     
     func setup(withName: String?, imageUrlString: String?) {
         drinkNameLabel.text = withName
@@ -19,4 +21,5 @@ class DrinkCell: UITableViewCell {
         guard let imageUrl = URL(string: imageUrlString ?? "") else { return }
         drinkImageView.kf.setImage(with: imageUrl)
     }
+    
 }

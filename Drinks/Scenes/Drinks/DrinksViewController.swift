@@ -40,6 +40,19 @@ class DrinksViewController: UIViewController {
         drinksTableView.register(UINib(nibName: drinkCellId, bundle: nil), forCellReuseIdentifier: drinkCellId)
     }
     
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if segue.identifier == "showFiltersScreen" {
+            guard let filtersViewController = segue.destination as? FiltersViewController else { return }
+            
+            let categories = presenter.getCategoriesList()
+            
+            filtersViewController.categories = categories
+        }
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
