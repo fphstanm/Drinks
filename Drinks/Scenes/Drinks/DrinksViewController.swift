@@ -8,81 +8,36 @@
 
 import UIKit
 
-class DrinksViewController: BaseViewController {
+class DrinksViewController: UIViewController {
     
     @IBOutlet private weak var drinksTableView: UITableView!
     
-    typealias DrinksGroupedByCategory = [([Drink], String)]
-    
-    private var drinksAll: [Drink] = []
-    private var drinks: DrinksGroupedByCategory = []
-    private var categories: [DrinkCategory] = []
-    
     private var drinkCellId: String { String(describing: DrinkCell.self) }
     
+    private var presenter: DrinksPresenter!
     
-    // MARK: lifecycle
+    
+    // MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter = DrinksPresenter(view: self)
         setupSubviews()
-        fetchDrinks()
-        fetchCategories()
     }
     
-    // MARK: setup methods
+    // MARK: Public methods / presenter interacion
+    
+    func reloadTableView() {
+        drinksTableView.reloadData()
+    }
+    
+    // MARK: Setup methods
 
     private func setupSubviews() {
         drinksTableView.dataSource = self
-        drinksTableView.register(UINib(nibName: "DrinkCell", bundle: nil), forCellReuseIdentifier: "DrinkCell")
-    }
-    
-    private func formGroupedDrinks(with list: [Drink]) -> DrinksGroupedByCategory {
-        var groupedList: DrinksGroupedByCategory = []
-        
-        for drink in list {
-            guard let drinkCategory = drink.strCategory else { continue }
-            guard !groupedList.isEmpty else { groupedList.append(([drink], drinkCategory)); continue }
-            
-            for (groupIndex, (_, category)) in groupedList.enumerated() {
-                if drinkCategory == category {
-                    groupedList[groupIndex].0.append(drink)
-                } else {
-                    groupedList.append(([drink], category))
-                }
-            }
-        }
-        
-        return groupedList
-    }
-    
-    // MARK: data fetching methods
-    
-    private func fetchDrinks() {
-        ApiService.getDrinks(byCategory: "Ordinary Drink") { [weak self] result in
-            switch result {
-            case .success(let drinks):
-                guard let fetchedDrinks = drinks.drinks else { return }
-                self?.drinksAll = fetchedDrinks
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    private func fetchCategories() {
-        ApiService.getDrinksCategories() { [weak self] result in
-            switch result {
-            case .success(let categories):
-                guard let fetchedCategories = categories.categories else { return }
-                self?.categories = fetchedCategories
-                print(categories)
-            case .failure(let error):
-                print(error)
-            }
-        }
+        drinksTableView.delegate = self
+        drinksTableView.register(UINib(nibName: drinkCellId, bundle: nil), forCellReuseIdentifier: drinkCellId)
     }
     
 }
@@ -91,26 +46,35 @@ class DrinksViewController: BaseViewController {
 
 extension DrinksViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        drinks.count
+        presenter.getNumberOfGroups()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        drinks[section].1
+        presenter.getGroupName(in: section)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        drinks[section].0.count
+        presenter.getNumberOfDrinksInGroup(in: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "DrinkCell") as? DrinkCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: drinkCellId) as? DrinkCell else { return UITableViewCell() }
         
-//        let title = drinks[indexPath.row].strDrink
-//        let imageUrlString = drinks[indexPath.row].strDrinkThumb
-//
-//        cell.setup(withName: title, imageUrlString: imageUrlString)
+        let title = presenter.getDrinkName(in: indexPath.section, with: indexPath.row)
+        let imageUrlString = presenter.getDrinkImage(in: indexPath.section, with: indexPath.row)
+
+        cell.setup(withName: title, imageUrlString: imageUrlString)
         
         return cell
     }
-    
+
 }
+
+// MARK: - UITableViewDelegate
+
+extension DrinksViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        presenter.checkShouldLoadNewCategory(section: indexPath.section, index: indexPath.row)
+    }
+}
+

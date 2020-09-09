@@ -10,7 +10,7 @@ import UIKit
 
 class BaseViewController: UIViewController {
     
-    private var presenter: BasePresenter!
+    var presenter: BasePresenter?
     
     
     override func viewDidLoad() {
@@ -19,7 +19,7 @@ class BaseViewController: UIViewController {
         initPresenter()
     }
     
-    private func initPresenter() {
+    func initPresenter() {
         
     }
 }
