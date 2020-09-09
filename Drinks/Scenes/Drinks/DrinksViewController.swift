@@ -32,10 +32,6 @@ class DrinksViewController: UIViewController {
         setupSubviews()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
     // MARK: Public methods / presenter interacion
     
     func reloadData() {
@@ -53,6 +49,9 @@ class DrinksViewController: UIViewController {
         drinksTableView.dataSource = self
         drinksTableView.delegate = self
         drinksTableView.register(UINib(nibName: drinkCellId, bundle: nil), forCellReuseIdentifier: drinkCellId)
+        
+        title = "Drinks"
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     // MARK: 
@@ -98,6 +97,8 @@ extension DrinksViewController: UITableViewDataSource {
         
         return cell
     }
+    
+    
 
 }
 
@@ -106,6 +107,20 @@ extension DrinksViewController: UITableViewDataSource {
 extension DrinksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         presenter.checkShouldLoadNewCategory(section: indexPath.section, index: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        
+        header.textLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        header.textLabel?.textColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+        let view = UIView()
+        view.backgroundColor = .white
+        header.backgroundView = view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        56.0
     }
 }
 

@@ -11,6 +11,8 @@
 		EF3D590E2508AA1900E659D2 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3D590D2508AA1900E659D2 /* FiltersViewController.swift */; };
 		EF3D59132508E17B00E659D2 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3D59112508E17B00E659D2 /* FilterCell.swift */; };
 		EF3D59142508E17B00E659D2 /* FilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF3D59122508E17B00E659D2 /* FilterCell.xib */; };
+		EF6D46482509769C005E928A /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6D46472509769C005E928A /* UINavigationController.swift */; };
+		EF6D464D250978FB005E928A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6D464C250978FB005E928A /* NavigationController.swift */; };
 		EFA96A252507E505009AAEC2 /* DrinkCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA96A242507E505009AAEC2 /* DrinkCategoryModel.swift */; };
 		EFA96A272507E5E1009AAEC2 /* DrinksPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA96A262507E5E1009AAEC2 /* DrinksPresenter.swift */; };
 		EFC0328C2506DEEA0056D5C5 /* DrinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC0328A2506DEEA0056D5C5 /* DrinkCell.swift */; };
@@ -26,8 +28,6 @@
 		EFFF56332507ED0C00893EE8 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFF56322507ED0C00893EE8 /* APIRouter.swift */; };
 		EFFF56352507EEE800893EE8 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFF56342507EEE800893EE8 /* APIConstants.swift */; };
 		EFFF56372507F16400893EE8 /* APIParameterKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFF56362507F16400893EE8 /* APIParameterKey.swift */; };
-		EFFF563A2508237400893EE8 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFF56392508237400893EE8 /* BaseViewController.swift */; };
-		EFFF563C2508238A00893EE8 /* BasePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFF563B2508238A00893EE8 /* BasePresenter.swift */; };
 		EFFF56402508A7C600893EE8 /* FiltersViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFFF563F2508A7C600893EE8 /* FiltersViewController.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +38,8 @@
 		EF3D590D2508AA1900E659D2 /* FiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		EF3D59112508E17B00E659D2 /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		EF3D59122508E17B00E659D2 /* FilterCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterCell.xib; sourceTree = "<group>"; };
+		EF6D46472509769C005E928A /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
+		EF6D464C250978FB005E928A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		EFA96A242507E505009AAEC2 /* DrinkCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkCategoryModel.swift; sourceTree = "<group>"; };
 		EFA96A262507E5E1009AAEC2 /* DrinksPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinksPresenter.swift; sourceTree = "<group>"; };
 		EFC0328A2506DEEA0056D5C5 /* DrinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkCell.swift; sourceTree = "<group>"; };
@@ -55,8 +57,6 @@
 		EFFF56322507ED0C00893EE8 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		EFFF56342507EEE800893EE8 /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		EFFF56362507F16400893EE8 /* APIParameterKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIParameterKey.swift; sourceTree = "<group>"; };
-		EFFF56392508237400893EE8 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		EFFF563B2508238A00893EE8 /* BasePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePresenter.swift; sourceTree = "<group>"; };
 		EFFF563F2508A7C600893EE8 /* FiltersViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FiltersViewController.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +90,30 @@
 			path = FilterCell;
 			sourceTree = "<group>";
 		};
+		EF6D46452509762E005E928A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				EF6D464625097664005E928A /* UI */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		EF6D464625097664005E928A /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				EF6D46472509769C005E928A /* UINavigationController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		EF6D464E25097988005E928A /* CustomClasses */ = {
+			isa = PBXGroup;
+			children = (
+				EF6D464C250978FB005E928A /* NavigationController.swift */,
+			);
+			path = CustomClasses;
+			sourceTree = "<group>";
+		};
 		EFF9542F2506CE5F009DF18C = {
 			isa = PBXGroup;
 			children = (
@@ -111,11 +135,12 @@
 		EFF9543A2506CE5F009DF18C /* Drinks */ = {
 			isa = PBXGroup;
 			children = (
-				EFFF56382508235A00893EE8 /* BaseClasses */,
-				EFF9544F2506CE82009DF18C /* Models */,
 				EFF954502506CE90009DF18C /* Scenes */,
-				EFF954522506CEC0009DF18C /* Views */,
+				EFF954522506CEC0009DF18C /* CustomViews */,
 				EFF954512506CE99009DF18C /* Services */,
+				EFF9544F2506CE82009DF18C /* Models */,
+				EF6D464E25097988005E928A /* CustomClasses */,
+				EF6D46452509762E005E928A /* Extensions */,
 				EFF954532506CEE2009DF18C /* Other */,
 			);
 			path = Drinks;
@@ -150,12 +175,12 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		EFF954522506CEC0009DF18C /* Views */ = {
+		EFF954522506CEC0009DF18C /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
 				EFF9545D2506D1F2009DF18C /* Cells */,
 			);
-			path = Views;
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		EFF954532506CEE2009DF18C /* Other */ = {
@@ -196,15 +221,6 @@
 				EFC0328B2506DEEA0056D5C5 /* DrinkCell.xib */,
 			);
 			path = DrinkCell;
-			sourceTree = "<group>";
-		};
-		EFFF56382508235A00893EE8 /* BaseClasses */ = {
-			isa = PBXGroup;
-			children = (
-				EFFF56392508237400893EE8 /* BaseViewController.swift */,
-				EFFF563B2508238A00893EE8 /* BasePresenter.swift */,
-			);
-			path = BaseClasses;
 			sourceTree = "<group>";
 		};
 		EFFF56412508A7CE00893EE8 /* DrinksFilter */ = {
@@ -347,12 +363,12 @@
 				EFA96A272507E5E1009AAEC2 /* DrinksPresenter.swift in Sources */,
 				EFF9545A2506D191009DF18C /* ApiService.swift in Sources */,
 				EF3D59132508E17B00E659D2 /* FilterCell.swift in Sources */,
+				EF6D464D250978FB005E928A /* NavigationController.swift in Sources */,
 				EFA96A252507E505009AAEC2 /* DrinkCategoryModel.swift in Sources */,
 				EF3D590E2508AA1900E659D2 /* FiltersViewController.swift in Sources */,
-				EFFF563A2508237400893EE8 /* BaseViewController.swift in Sources */,
 				EFFF56372507F16400893EE8 /* APIParameterKey.swift in Sources */,
+				EF6D46482509769C005E928A /* UINavigationController.swift in Sources */,
 				EFF9543E2506CE5F009DF18C /* SceneDelegate.swift in Sources */,
-				EFFF563C2508238A00893EE8 /* BasePresenter.swift in Sources */,
 				EFFF56352507EEE800893EE8 /* APIConstants.swift in Sources */,
 				EFC0328C2506DEEA0056D5C5 /* DrinkCell.swift in Sources */,
 				EFF954582506D132009DF18C /* DrinkModel.swift in Sources */,

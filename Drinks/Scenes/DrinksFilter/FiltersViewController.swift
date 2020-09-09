@@ -22,7 +22,7 @@ class FiltersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         setupSubviews()
     }
 
@@ -30,6 +30,8 @@ class FiltersViewController: UIViewController {
         filtersTableView.delegate = self
         filtersTableView.dataSource = self
         filtersTableView.register(UINib(nibName: filterCellId, bundle: nil), forCellReuseIdentifier: filterCellId)
+        
+        title = "Filters"
     }
     
     @IBAction private func onApplyButtonTapped(_ sender: Any) {

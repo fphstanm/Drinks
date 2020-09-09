@@ -80,7 +80,7 @@ class DrinksPresenter {
         
         if canLoadMoreCategories {
             let newCategoryName = selectedCategories[getNumberOfGroups()]
-            loadDrinksOfCategory(name: newCategoryName)
+            loadDrinksForCategory(withName: newCategoryName)
         } else {
             // TODO: show alert
         }
@@ -120,7 +120,7 @@ class DrinksPresenter {
     private func checkFilteringResult() {
         if filteredDrinks.isEmpty && !fetchedDrinks.isEmpty {
             guard let category = selectedCategories.first else { return }
-            loadDrinksOfCategory(name: category)
+            loadDrinksForCategory(withName: category)
         }
     }
     
@@ -147,11 +147,11 @@ class DrinksPresenter {
         }
     }
     
-    private func loadDrinksOfCategory(name: String) {
-        fetchDrinks(byCategory: name) { [weak self] fetchedDrinks in
+    private func loadDrinksForCategory(withName: String) {
+        fetchDrinks(byCategory: withName) { [weak self] fetchedDrinks in
             guard let fetchedDrinks = fetchedDrinks else { return }
             
-            self?.fetchedDrinks.append((fetchedDrinks, name))
+            self?.fetchedDrinks.append((fetchedDrinks, withName))
             
             self?.view.reloadData()
         }
